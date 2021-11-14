@@ -32,3 +32,17 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+loadProperties()
+
+def loadProperties() {
+    Properties properties = new Properties()
+    File localPropertiesFile = rootProject.file("local.properties")
+    if (localPropertiesFile.exists()) {
+        properties.load(localPropertiesFile.newDataInputStream())
+    }
+    properties.forEach{key, value->
+        System.setProperty(key, value)
+        println("loadProperty===>$key=$value")
+    }
+}
