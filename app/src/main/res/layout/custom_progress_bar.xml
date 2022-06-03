@@ -4,4 +4,6 @@
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:layout_gravity="center"
-    android:indeterminate="true" />
+    android:indeterminate="true"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:visibility="gone"/>

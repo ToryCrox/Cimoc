@@ -1,6 +1,7 @@
 package com.hiroshi.cimoc;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.res.Resources;
 import android.net.wifi.WifiManager;
@@ -154,7 +155,7 @@ public class App extends MultiDexApplication implements AppGetter, Thread.Uncaug
         return this;
     }
 
-    public static Context getAppContext() {
+    public static App getAppContext() {
         return mApp;
     }
 

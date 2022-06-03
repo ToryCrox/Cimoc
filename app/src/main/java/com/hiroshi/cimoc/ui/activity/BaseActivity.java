@@ -41,7 +41,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseView
         super.onCreate(savedInstanceState);
         mPreference = getAppInstance().getPreferenceManager();
         initTheme();
-        setContentView(getLayoutRes());
+        createContentView(getLayoutRes());
         ButterKnife.bind(this);
         initNight();
         initToolbar();
@@ -50,6 +50,10 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseView
         initView();
         initData();
         initUser();
+    }
+
+    protected void createContentView(int layoutId) {
+        setContentView(layoutId);
     }
 
     @Override
@@ -121,7 +125,9 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseView
     protected void initUser() {
     }
 
-    protected abstract int getLayoutRes();
+    protected int getLayoutRes() {
+        return 0;
+    }
 
     protected boolean isNavTranslation() {
         return false;
