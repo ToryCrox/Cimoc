@@ -1,13 +1,6 @@
 package com.hiroshi.cimoc.ui.activity
 
-import com.hiroshi.cimoc.ui.activity.BackActivity
-import android.widget.TextView.OnEditorActionListener
-import butterknife.BindView
 import com.hiroshi.cimoc.R
-import com.google.android.material.textfield.TextInputLayout
-import androidx.appcompat.widget.AppCompatAutoCompleteTextView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import androidx.appcompat.widget.AppCompatCheckBox
 import android.widget.ArrayAdapter
 import com.hiroshi.cimoc.presenter.SearchPresenter
 import com.hiroshi.cimoc.misc.Switcher
@@ -25,7 +18,6 @@ import android.view.MenuItem
 import com.hiroshi.cimoc.component.DialogCaller
 import android.widget.TextView
 import android.view.inputmethod.EditorInfo
-import butterknife.OnClick
 import com.hiroshi.cimoc.databinding.ActivitySearchBinding
 import com.hiroshi.cimoc.manager.PreferenceManager
 import com.hiroshi.cimoc.model.Source
@@ -39,8 +31,7 @@ import java.util.ArrayList
 /**
  * Created by Hiroshi on 2016/10/11.
  */
-class SearchActivity : BackActivity(), SearchView, OnEditorActionListener {
-
+class SearchActivity : BackActivity(), SearchView {
 
     private var mArrayAdapter: ArrayAdapter<String>? = null
     private var mPresenter: SearchPresenter? = null
@@ -82,7 +73,12 @@ class SearchActivity : BackActivity(), SearchView, OnEditorActionListener {
                 }
             }
         })
-        binding.searchKeywordInput.setOnEditorActionListener(this)
+        binding.searchKeywordInput.setOnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                binding.searchActionButton.performClick()
+                true
+            } else false
+        }
         if (mAutoComplete) {
             mArrayAdapter = AutoCompleteAdapter(this)
             binding.searchKeywordInput.setAdapter(mArrayAdapter)
@@ -120,7 +116,6 @@ class SearchActivity : BackActivity(), SearchView, OnEditorActionListener {
                     DIALOG_REQUEST_SOURCE
                 )
                 fragment.show(fragmentManager, null)
-                break
             }
         }
         return super.onOptionsItemSelected(item)
@@ -140,14 +135,6 @@ class SearchActivity : BackActivity(), SearchView, OnEditorActionListener {
                 }
             }
         }
-    }
-
-    override fun onEditorAction(v: TextView, actionId: Int, event: KeyEvent): Boolean {
-        if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-            binding.searchActionButton.performClick()
-            return true
-        }
-        return false
     }
 
     fun onSearchButtonClick() {
