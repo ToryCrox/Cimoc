@@ -100,7 +100,7 @@ public class Local {
         String name = null;
         int other = 0;
         for (DocumentFile file : info.dir.listFiles()) {
-            if (file.isFile() && StringUtils.endWith(file.getName(), "png", "jpg", "jpeg")) {
+            if (file.isFile() && StringUtils.endWith(file.getName(), "png", "jpg", "jpeg", "webp")) {
                 ++info.count;
             } else {
                 ++other;

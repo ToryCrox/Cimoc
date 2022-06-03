@@ -1,10 +1,12 @@
 package com.hiroshi.cimoc.ui.fragment.dialog;
 
+
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.DialogFragment;
+
 import android.view.View;
 
 import com.hiroshi.cimoc.R;

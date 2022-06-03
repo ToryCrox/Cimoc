@@ -1,9 +1,10 @@
 package com.hiroshi.cimoc.ui.adapter;
 
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import androidx.legacy.app.FragmentPagerAdapter;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.hiroshi.cimoc.ui.fragment.BaseFragment;
 

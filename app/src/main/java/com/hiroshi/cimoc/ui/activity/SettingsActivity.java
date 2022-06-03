@@ -1,5 +1,6 @@
 package com.hiroshi.cimoc.ui.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -132,19 +133,19 @@ public class SettingsActivity extends BackActivity implements SettingsView {
         mLoadCoverOnlyWifi.bindPreference(PreferenceManager.PREF_OTHER_LOADCOVER_ONLY_WIFI, false);
         mFireBaseEvent.bindPreference(PreferenceManager.PREF_OTHER_FIREBASE_EVENT, true);
         mOtherShowTopbar.bindPreference(PreferenceManager.PREF_OTHER_SHOW_TOPBAR,false);
-        mReaderMode.bindPreference(getFragmentManager(), PreferenceManager.PREF_READER_MODE,
+        mReaderMode.bindPreference(getSupportFragmentManager(), PreferenceManager.PREF_READER_MODE,
                 PreferenceManager.READER_MODE_PAGE, R.array.reader_mode_items, DIALOG_REQUEST_READER_MODE);
-        mOtherLaunch.bindPreference(getFragmentManager(), PreferenceManager.PREF_OTHER_LAUNCH,
+        mOtherLaunch.bindPreference(getSupportFragmentManager(), PreferenceManager.PREF_OTHER_LAUNCH,
                 PreferenceManager.HOME_FAVORITE, R.array.launch_items, DIALOG_REQUEST_OTHER_LAUNCH);
-        mOtherTheme.bindPreference(getFragmentManager(), PreferenceManager.PREF_OTHER_THEME,
+        mOtherTheme.bindPreference(getSupportFragmentManager(), PreferenceManager.PREF_OTHER_THEME,
                 ThemeUtils.THEME_BLUE, R.array.theme_items, DIALOG_REQUEST_OTHER_THEME);
-        mReaderScaleFactor.bindPreference(getFragmentManager(), PreferenceManager.PREF_READER_SCALE_FACTOR, 200,
+        mReaderScaleFactor.bindPreference(getSupportFragmentManager(), PreferenceManager.PREF_READER_SCALE_FACTOR, 200,
                 R.string.settings_reader_scale_factor, DIALOG_REQUEST_READER_SCALE_FACTOR);
-        mReaderControllerTrigThreshold.bindPreference(getFragmentManager(), PreferenceManager.PREF_READER_CONTROLLER_TRIG_THRESHOLD, 30,
+        mReaderControllerTrigThreshold.bindPreference(getSupportFragmentManager(), PreferenceManager.PREF_READER_CONTROLLER_TRIG_THRESHOLD, 30,
                 R.string.settings_reader_controller_trig_threshold, DIALOG_REQUEST_READER_CONTROLLER_TRIG_THRESHOLD);
-        mOtherNightAlpha.bindPreference(getFragmentManager(), PreferenceManager.PREF_OTHER_NIGHT_ALPHA, 0xB0,
+        mOtherNightAlpha.bindPreference(getSupportFragmentManager(), PreferenceManager.PREF_OTHER_NIGHT_ALPHA, 0xB0,
                 R.string.settings_other_night_alpha, DIALOG_REQUEST_OTHER_NIGHT_ALPHA);
-        mDownloadThread.bindPreference(getFragmentManager(), PreferenceManager.PREF_DOWNLOAD_THREAD, 2,
+        mDownloadThread.bindPreference(getSupportFragmentManager(), PreferenceManager.PREF_DOWNLOAD_THREAD, 2,
                 R.string.settings_download_thread, DIALOG_REQUEST_DOWNLOAD_THREAD);
     }
 
@@ -154,28 +155,19 @@ public class SettingsActivity extends BackActivity implements SettingsView {
         startActivity(intent);
     }
 
+    @SuppressLint("WrongConstant")
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case DIALOG_REQUEST_OTHER_STORAGE:
                     showProgressDialog();
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        Uri uri = data.getData();
-                        int flags = data.getFlags() & (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                        getContentResolver().takePersistableUriPermission(uri, flags);
-                        mTempStorage = uri.toString();
-                        mPresenter.moveFiles(DocumentFile.fromTreeUri(this, uri));
-                    } else {
-                        String path = data.getStringExtra(Extra.EXTRA_PICKER_PATH);
-                        if (!StringUtils.isEmpty(path)) {
-                            DocumentFile file = DocumentFile.fromFile(new File(path));
-                            mTempStorage = file.getUri().toString();
-                            mPresenter.moveFiles(file);
-                        } else {
-                            onExecuteFail();
-                        }
-                    }
+                    Uri uri = data.getData();
+                    int flags = data.getFlags() & (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                    getContentResolver().takePersistableUriPermission(uri, flags);
+                    mTempStorage = uri.toString();
+                    mPresenter.moveFiles(DocumentFile.fromTreeUri(this, uri));
                     break;
             }
         }
@@ -269,7 +261,7 @@ public class SettingsActivity extends BackActivity implements SettingsView {
         } else {
             StorageEditorDialogFragment fragment = StorageEditorDialogFragment.newInstance(R.string.settings_other_storage,
                     mStoragePath, DIALOG_REQUEST_OTHER_STORAGE);
-            fragment.show(getFragmentManager(), null);
+            fragment.show(getSupportFragmentManager(), null);
         }
     }
 
@@ -280,7 +272,7 @@ public class SettingsActivity extends BackActivity implements SettingsView {
         } else {
             MessageDialogFragment fragment = MessageDialogFragment.newInstance(R.string.dialog_confirm,
                     R.string.settings_download_scan_confirm, true, DIALOG_REQUEST_DOWNLOAD_SCAN);
-            fragment.show(getFragmentManager(), null);
+            fragment.show(getSupportFragmentManager(), null);
         }
     }
 

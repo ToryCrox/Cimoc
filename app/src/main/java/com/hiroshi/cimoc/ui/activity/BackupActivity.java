@@ -139,7 +139,7 @@ public class BackupActivity extends BackActivity implements BackupView {
     private void showChoiceDialog(int title, String[] item, int request) {
         hideProgressDialog();
         ChoiceDialogFragment fragment = ChoiceDialogFragment.newInstance(title, item, -1, request);
-        fragment.show(getFragmentManager(), null);
+        fragment.show(getSupportFragmentManager(), null);
     }
 
     @Override

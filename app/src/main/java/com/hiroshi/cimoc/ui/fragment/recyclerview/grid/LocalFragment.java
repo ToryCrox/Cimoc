@@ -53,16 +53,11 @@ public class LocalFragment extends GridFragment implements LocalView {
 
     @Override
     protected void performActionButtonClick() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            try {
-                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
-                getActivity().startActivityForResult(intent, DIALOG_REQUEST_SCAN);
-            } catch (ActivityNotFoundException e) {
-                HintUtils.showToast(getActivity(), R.string.settings_other_storage_not_found);
-            }
-        } else {
-            Intent intent = new Intent(getActivity(), DirPickerActivity.class);
-            startActivityForResult(intent, DIALOG_REQUEST_SCAN);
+        try {
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+            getActivity().startActivityForResult(intent, DIALOG_REQUEST_SCAN);
+        } catch (ActivityNotFoundException e) {
+            HintUtils.showToast(getActivity(), R.string.settings_other_storage_not_found);
         }
     }
 
@@ -72,19 +67,10 @@ public class LocalFragment extends GridFragment implements LocalView {
             switch (requestCode) {
                 case DIALOG_REQUEST_SCAN:
                     showProgressDialog();
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        Uri uri = data.getData();
-                        int flags = data.getFlags() & (Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                        getActivity().getContentResolver().takePersistableUriPermission(uri, flags);
-                        mPresenter.scan(DocumentFile.fromTreeUri(getActivity(), uri));
-                    } else {
-                        String path = data.getStringExtra(Extra.EXTRA_PICKER_PATH);
-                        if (!StringUtils.isEmpty(path)) {
-                            mPresenter.scan(DocumentFile.fromFile(new File(path)));
-                        } else {
-                            onExecuteFail();
-                        }
-                    }
+                    Uri uri = data.getData();
+                    int flags = data.getFlags() & (Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    getActivity().getContentResolver().takePersistableUriPermission(uri, flags);
+                    mPresenter.scan(DocumentFile.fromTreeUri(getActivity(), uri));
                     break;
             }
         }
@@ -110,7 +96,7 @@ public class LocalFragment extends GridFragment implements LocalView {
                         MessageDialogFragment fragment = MessageDialogFragment.newInstance(R.string.dialog_confirm,
                                 R.string.local_delete_confirm, true, DIALOG_REQUEST_DELETE);
                         fragment.setTargetFragment(this, 0);
-                        fragment.show(getFragmentManager(), null);
+                        fragment.show(getChildFragmentManager(), null);
                 }
                 break;
             case DIALOG_REQUEST_DELETE:

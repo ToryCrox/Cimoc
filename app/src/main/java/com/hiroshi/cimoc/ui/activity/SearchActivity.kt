@@ -162,7 +162,7 @@ class SearchActivity : BackActivity(), SearchView {
                     arr2,
                     DIALOG_REQUEST_SOURCE
                 )
-                fragment.show(fragmentManager, null)
+                fragment.show(supportFragmentManager, null)
             }
         }
         return super.onOptionsItemSelected(item)

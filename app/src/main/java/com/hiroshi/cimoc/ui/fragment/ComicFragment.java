@@ -66,7 +66,7 @@ public class ComicFragment extends BaseFragment implements ComicView {
         mTabLayout.addTab(mTabLayout.newTab().setText(R.string.comic_tab_favorite));
         mTabLayout.addTab(mTabLayout.newTab().setText(R.string.comic_tab_download));
         mTabLayout.addTab(mTabLayout.newTab().setText(R.string.comic_tab_local));
-        mTabAdapter = new TabPagerAdapter(getFragmentManager(),
+        mTabAdapter = new TabPagerAdapter(getChildFragmentManager(),
                 new GridFragment[]{new HistoryFragment(), new FavoriteFragment(), new DownloadFragment(), new LocalFragment()},
                 new String[]{getString(R.string.comic_tab_history), getString(R.string.comic_tab_favorite), getString(R.string.comic_tab_download), getString(R.string.comic_tab_local)});
         mViewPager.setOffscreenPageLimit(4);
@@ -156,7 +156,7 @@ public class ComicFragment extends BaseFragment implements ComicView {
         }
         ItemDialogFragment fragment = ItemDialogFragment.newInstance(R.string.comic_tag_select, item, DIALOG_REQUEST_FILTER);
         fragment.setTargetFragment(this, 0);
-        fragment.show(getFragmentManager(), null);
+        fragment.show(getChildFragmentManager(), null);
     }
 
     @Override

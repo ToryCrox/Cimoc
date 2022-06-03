@@ -21,6 +21,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.fragment.app.Fragment;
 
 import android.util.Log;
 import android.util.SparseArray;
@@ -28,7 +29,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -91,8 +91,8 @@ public class MainActivity extends BaseActivity implements MainView, NavigationVi
     private String mLastCid;
 
     private int mCheckItem;
-    private SparseArray<BaseFragment> mFragmentArray;
-    private BaseFragment mCurrentFragment;
+    private SparseArray<Fragment> mFragmentArray;
+    private Fragment mCurrentFragment;
     private boolean night;
 
     //auth0
@@ -234,9 +234,9 @@ public class MainActivity extends BaseActivity implements MainView, NavigationVi
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
                 if (refreshCurrentFragment()) {
-                    getFragmentManager().beginTransaction().show(mCurrentFragment).commit();
+                    getSupportFragmentManager().beginTransaction().show(mCurrentFragment).commit();
                 } else {
-                    getFragmentManager().beginTransaction().add(R.id.main_fragment_container, mCurrentFragment).commit();
+                    getSupportFragmentManager().beginTransaction().add(R.id.main_fragment_container, mCurrentFragment).commit();
                 }
             }
         };
@@ -293,7 +293,7 @@ public class MainActivity extends BaseActivity implements MainView, NavigationVi
         mNavigationView.setCheckedItem(mCheckItem);
         mFragmentArray = new SparseArray<>(FRAGMENT_NUM);
         refreshCurrentFragment();
-        getFragmentManager().beginTransaction().add(R.id.main_fragment_container, mCurrentFragment).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.main_fragment_container, mCurrentFragment).commit();
     }
 
     private boolean refreshCurrentFragment() {
@@ -330,9 +330,9 @@ public class MainActivity extends BaseActivity implements MainView, NavigationVi
         mDrawerToggle.syncState();
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-    }
+    // @Override
+    // protected void onSaveInstanceState(Bundle outState) {
+    // }
 
     @Override
     public void onBackPressed() {
@@ -355,7 +355,7 @@ public class MainActivity extends BaseActivity implements MainView, NavigationVi
                 case R.id.drawer_source:
 //                case R.id.drawer_tag:
                     mCheckItem = itemId;
-                    getFragmentManager().beginTransaction().hide(mCurrentFragment).commit();
+                    getSupportFragmentManager().beginTransaction().hide(mCurrentFragment).commit();
                     if (mToolbar != null) {
                         mToolbar.setTitle(item.getTitle().toString());
                     }
@@ -392,6 +392,7 @@ public class MainActivity extends BaseActivity implements MainView, NavigationVi
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         mCurrentFragment.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
@@ -525,7 +526,7 @@ public class MainActivity extends BaseActivity implements MainView, NavigationVi
                             mPreference.putString(PreferenceManager.PREF_MAIN_NOTICE_LAST, showMsg);
                             MessageDialogFragment fragment = MessageDialogFragment.newInstance(R.string.main_notice,
                                     showMsg, false, DIALOG_REQUEST_NOTICE);
-                            fragment.show(getFragmentManager(), null);
+                            fragment.show(getSupportFragmentManager(), null);
                         }
                     }
                 });
@@ -540,7 +541,7 @@ public class MainActivity extends BaseActivity implements MainView, NavigationVi
         if (!PermissionUtils.hasStoragePermission(this)) {
             MessageDialogFragment fragment = MessageDialogFragment.newInstance(R.string.main_permission,
                     R.string.main_permission_content, false, DIALOG_REQUEST_PERMISSION);
-            fragment.show(getFragmentManager(), null);
+            fragment.show(getSupportFragmentManager(), null);
         }
     }
 

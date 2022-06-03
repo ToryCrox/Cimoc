@@ -1,11 +1,13 @@
 package com.hiroshi.cimoc.ui.widget.preference;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
+
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.hiroshi.cimoc.App;
 import com.hiroshi.cimoc.R;

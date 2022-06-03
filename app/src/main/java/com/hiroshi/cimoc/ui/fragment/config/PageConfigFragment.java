@@ -63,11 +63,11 @@ public class PageConfigFragment extends BaseFragment implements DialogCaller {
         mReaderLoadNext.bindPreference(PreferenceManager.PREF_READER_PAGE_LOAD_NEXT, true);
         mReaderBanTurn.bindPreference(PreferenceManager.PREF_READER_PAGE_BAN_TURN, false);
         mReaderQuickTurn.bindPreference(PreferenceManager.PREF_READER_PAGE_QUICK_TURN, false);
-        mReaderOrientation.bindPreference(getFragmentManager(), this, PreferenceManager.PREF_READER_PAGE_ORIENTATION,
+        mReaderOrientation.bindPreference(getChildFragmentManager(), this, PreferenceManager.PREF_READER_PAGE_ORIENTATION,
                 PreferenceManager.READER_ORIENTATION_AUTO, R.array.reader_orientation_items, DIALOG_REQUEST_ORIENTATION);
-        mReaderTurn.bindPreference(getFragmentManager(), this, PreferenceManager.PREF_READER_PAGE_TURN,
+        mReaderTurn.bindPreference(getChildFragmentManager(), this, PreferenceManager.PREF_READER_PAGE_TURN,
                 PreferenceManager.READER_TURN_LTR, R.array.reader_turn_items, DIALOG_REQUEST_TURN);
-        mReaderTrigger.bindPreference(getFragmentManager(), this, PreferenceManager.PREF_READER_PAGE_TRIGGER, 10,
+        mReaderTrigger.bindPreference(getChildFragmentManager(), this, PreferenceManager.PREF_READER_PAGE_TRIGGER, 10,
                 R.string.settings_reader_trigger, DIALOG_REQUEST_TRIGGER);
     }
 
@@ -94,7 +94,7 @@ public class PageConfigFragment extends BaseFragment implements DialogCaller {
             Context context = this.getContext();
             ChoiceDialogFragment fragment = ChoiceDialogFragment.newInstance(R.string.event_select,
                     ClickEvents.getEventTitleArray(context), mChoiceArray[index], index);
-            fragment.show(getFragmentManager(), null);
+            fragment.show(getChildFragmentManager(), null);
         }
     }
 
