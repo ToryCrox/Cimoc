@@ -27,6 +27,7 @@ import com.hiroshi.cimoc.saf.DocumentFile;
 import com.hiroshi.cimoc.ui.adapter.GridAdapter;
 import com.hiroshi.cimoc.utils.DocumentUtils;
 import com.hiroshi.cimoc.utils.StringUtils;
+import com.tencent.mmkv.MMKV;
 
 import org.greenrobot.greendao.identityscope.IdentityScopeType;
 
@@ -76,6 +77,7 @@ public class App extends MultiDexApplication implements AppGetter, Thread.Uncaug
     public void onCreate() {
         super.onCreate();
         Thread.setDefaultUncaughtExceptionHandler(this);
+        MMKV.initialize(this);
         mActivityLifecycle = new ActivityLifecycle();
         registerActivityLifecycleCallbacks(mActivityLifecycle);
         mPreferenceManager = new PreferenceManager(this);

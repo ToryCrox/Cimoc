@@ -1,5 +1,7 @@
 package com.hiroshi.cimoc.ui.activity
 
+import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import com.hiroshi.cimoc.R
 import android.widget.ArrayAdapter
 import com.hiroshi.cimoc.presenter.SearchPresenter
@@ -10,22 +12,28 @@ import android.text.TextWatcher
 import android.text.Editable
 import com.hiroshi.cimoc.ui.adapter.AutoCompleteAdapter
 import com.hiroshi.cimoc.ui.fragment.dialog.MultiDialogFragment
-import com.hiroshi.cimoc.ui.activity.SearchActivity
 import android.os.Bundle
-import android.view.KeyEvent
+import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuItem
 import com.hiroshi.cimoc.component.DialogCaller
 import android.widget.TextView
 import android.view.inputmethod.EditorInfo
+import androidx.activity.viewModels
+import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.view.setPadding
+import androidx.lifecycle.lifecycleScope
 import com.hiroshi.cimoc.databinding.ActivitySearchBinding
 import com.hiroshi.cimoc.manager.PreferenceManager
 import com.hiroshi.cimoc.model.Source
 import com.hiroshi.cimoc.utils.HintUtils
-import com.hiroshi.cimoc.ui.activity.ResultActivity
 import com.hiroshi.cimoc.ui.view.SearchView
 import com.hiroshi.cimoc.utils.CollectionUtils
 import com.hiroshi.cimoc.utils.StringUtils
+import com.hiroshi.cimoc.vm.SearchViewModel
+import com.tory.module_adapter.utils.dp
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import java.util.ArrayList
 
 /**
@@ -37,6 +45,9 @@ class SearchActivity : BackActivity(), SearchView {
     private var mPresenter: SearchPresenter? = null
     private val mSourceList: MutableList<Switcher<Source>> = ArrayList()
     private var mAutoComplete = false
+
+    private val viewModel: SearchViewModel by viewModels()
+
     override fun initPresenter(): BasePresenter<*> {
         val presenter = SearchPresenter()
         mPresenter = presenter
@@ -84,8 +95,44 @@ class SearchActivity : BackActivity(), SearchView {
             binding.searchKeywordInput.setAdapter(mArrayAdapter)
         }
         binding.searchActionButton.setOnClickListener {
-            onSearchButtonClick()
+            val keyword = binding.searchKeywordInput.text.toString().trim()
+            doSearch(keyword)
         }
+
+        initHistory()
+    }
+
+    private fun initHistory() {
+        binding.searchHistory.lineSpacing = 10.dp()
+        binding.searchHistory.itemSpacing = 10.dp()
+        viewModel.historyKeysState.onEach {
+            updateHistoryUI(it)
+        }.launchIn(lifecycleScope)
+    }
+
+    private fun updateHistoryUI(keys: List<String>) {
+
+        binding.searchHistory.removeAllViews()
+        keys.forEach { key->
+            val textView = createItem()
+            textView.text = key
+            textView.setOnClickListener {
+                doSearch(key)
+            }
+            binding.searchHistory.addView(textView)
+        }
+    }
+
+    private fun createItem(): TextView {
+        val textView = AppCompatTextView(this)
+        textView.background = GradientDrawable().also {
+            it.setColor(0xfff1f2f3.toInt())
+            it.cornerRadius = 4.dp().toFloat()
+        }
+        textView.setPadding(6.dp())
+        textView.setTextColor(Color.BLACK)
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14f)
+        return textView
     }
 
     override fun initData() {
@@ -137,21 +184,16 @@ class SearchActivity : BackActivity(), SearchView {
         }
     }
 
-    fun onSearchButtonClick() {
-        val keyword = binding.searchKeywordInput.text.toString()
+    fun doSearch(keyword: String) {
         val strictSearch = binding.searchStrictCheckbox.isChecked
-        if (StringUtils.isEmpty(keyword)) {
+        if (keyword.isBlank()) {
             binding.searchTextLayout.error = getString(R.string.search_keyword_empty)
         } else {
-            val list = ArrayList<Int>()
-            for (switcher in mSourceList) {
-                if (switcher.isEnable) {
-                    list.add(switcher.element.type)
-                }
-            }
+            val list = mSourceList.filter { it.isEnable }.map { it.element.type }
             if (list.isEmpty()) {
                 HintUtils.showToast(this, R.string.search_source_none)
             } else {
+                viewModel.addSearchKeyword(keyword)
                 startActivity(
                     ResultActivity.createIntent(
                         this, keyword, strictSearch,

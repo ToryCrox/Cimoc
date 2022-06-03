@@ -60,10 +60,11 @@
                 android:textSize="14sp" />
         </FrameLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
+        <com.hiroshi.cimoc.widget.FlowLayout
             android:id="@+id/searchHistory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
             android:padding="10dp" />
 
     </LinearLayout>
