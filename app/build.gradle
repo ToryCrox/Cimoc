@@ -128,6 +128,8 @@ dependencies {
     implementation 'com.github.ToryCrox.ModuleAdapter:module_adapter:0.2.0'
     implementation 'com.github.ybq:Android-SpinKit:1.4.0'
     implementation 'com.tencent:mmkv-static:1.2.2'
+
+    implementation 'com.github.youlookwhat:BySMB:1.1.0'
 }
 repositories {
     mavenCentral()

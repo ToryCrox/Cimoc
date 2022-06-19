@@ -14,10 +14,10 @@ import com.hiroshi.cimoc.ui.fragment.BaseFragment;
 
 public class TabPagerAdapter extends FragmentPagerAdapter {
 
-    private BaseFragment[] fragment;
+    private Fragment[] fragment;
     private String[] title;
 
-    public TabPagerAdapter(FragmentManager manager, BaseFragment[] fragment, String[] title) {
+    public TabPagerAdapter(FragmentManager manager, Fragment[] fragment, String[] title) {
         super(manager);
         this.fragment = fragment;
         this.title = title;

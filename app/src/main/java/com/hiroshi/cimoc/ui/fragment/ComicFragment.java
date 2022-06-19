@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.ColorRes;
 import com.google.android.material.tabs.TabLayout;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,6 +19,7 @@ import com.hiroshi.cimoc.manager.TagManager;
 import com.hiroshi.cimoc.model.Tag;
 import com.hiroshi.cimoc.presenter.BasePresenter;
 import com.hiroshi.cimoc.presenter.ComicPresenter;
+import com.hiroshi.cimoc.smb.SmbListFragment;
 import com.hiroshi.cimoc.ui.activity.PartFavoriteActivity;
 import com.hiroshi.cimoc.ui.activity.SearchActivity;
 import com.hiroshi.cimoc.ui.adapter.TabPagerAdapter;
@@ -66,9 +68,10 @@ public class ComicFragment extends BaseFragment implements ComicView {
         mTabLayout.addTab(mTabLayout.newTab().setText(R.string.comic_tab_favorite));
         mTabLayout.addTab(mTabLayout.newTab().setText(R.string.comic_tab_download));
         mTabLayout.addTab(mTabLayout.newTab().setText(R.string.comic_tab_local));
+        mTabLayout.addTab(mTabLayout.newTab().setText("网络"));
         mTabAdapter = new TabPagerAdapter(getChildFragmentManager(),
-                new GridFragment[]{new HistoryFragment(), new FavoriteFragment(), new DownloadFragment(), new LocalFragment()},
-                new String[]{getString(R.string.comic_tab_history), getString(R.string.comic_tab_favorite), getString(R.string.comic_tab_download), getString(R.string.comic_tab_local)});
+                new Fragment[]{new HistoryFragment(), new FavoriteFragment(), new DownloadFragment(), new LocalFragment(), new SmbListFragment()},
+                new String[]{getString(R.string.comic_tab_history), getString(R.string.comic_tab_favorite), getString(R.string.comic_tab_download), getString(R.string.comic_tab_local), "网络"});
         mViewPager.setOffscreenPageLimit(4);
         mViewPager.setAdapter(mTabAdapter);
         int home = mPreference.getInt(PreferenceManager.PREF_OTHER_LAUNCH, PreferenceManager.HOME_FAVORITE);
